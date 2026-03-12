@@ -1,0 +1,261 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>userhome - BreatheWell</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static "wind.png" %}" rel="icon">
+  <link href="{% static "assets/img/apple-touch-icon.png" %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+  <link href="{% static "assets/vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+  <link href="{% static "assets/vendor/aos/aos.css" rel="stylesheet" %}">
+  <link href="{% static "assets/vendor/fontawesome-free/css/all.min.css" %}" rel="stylesheet">
+  <link href="{% static "assets/vendor/swiper/swiper-bundle.min.css" %}" rel="stylesheet">
+  <link href="{% static "assets/vendor/glightbox/css/glightbox.min.css" %}" rel="stylesheet">
+  <link href="{% static "assets/css/main.css" %}" rel="stylesheet">
+
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="userhome.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="{% static "assets/img/logo.webp" %}" alt=""> -->
+        <img src="{% static "assets/img/wind.png" %}" alt="BreatheWell Logo" class="img-fluid" style="width: 32px; height: 32px; margin-right: 8px;">
+        
+
+        <h1 class="sitename">BreatheWell</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          
+          <li><a href="/">Home</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/profile/">Account</a></li>
+          
+          <li class="dropdown"><a href="#"><span>Services</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="/realtimedata/">Real Time Data</a></li>
+              <li><a href="/risklevels/">Risk Levels</a></li>
+              <li><a href="/forecast/">Forcast</a></li>
+              <li><a href="/historicaldata/">Historical Data</a></li>
+              <li><a href="/routeoptimization/">Route Optimization</a></li>
+            </ul>
+          </li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="btn-getstarted" href="/logout/">Sign Out</a>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+      <div class="container-fluid p-0">
+        <div class="hero-wrapper">
+          <div class="hero-image">
+            <img src="{% static "assets/img/health/indexpage.jpg" %}" alt="Advanced Healthcare" class="img-fluid">
+          </div>
+
+          <div class="hero-content">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-7 col-md-10" data-aos="fade-right" data-aos-delay="100">
+                  <div class="content-box">
+                    <span class="badge-accent" data-aos="fade-up" data-aos-delay="150">Smart Air Quality and Health Risk Monitoring</span>
+                    <h1 data-aos="fade-up" data-aos-delay="200">Real-Time Personalized Air Quality and Health Risk Monitoring</h1>
+                    <p data-aos="fade-up" data-aos-delay="250">Track your air pollution exposure & health risks instantly using smart sensors and AI-powered predictions.</p>
+
+                    {% comment %} <div class="cta-group" data-aos="fade-up" data-aos-delay="300">
+                      <a href="/login/" class="btn btn-primary">Login</a>
+                      <a href="/register/" class="btn btn-outline">Sign up</a>
+                    </div> {% endcomment %}
+
+                    <div class="info-badges" data-aos="fade-up" data-aos-delay="350">
+                      <div class="badge-item">
+                       
+                        <div class="badge-content">
+                          <span></span>
+                          <strong></strong>
+                        </div>
+                      </div>
+                      <div class="badge-item">
+                       
+                        <div class="badge-content">
+                          <span></span>
+                          <strong></strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="features-wrapper">
+                <div class="row gy-4">
+
+                  <div class="col-lg-4">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="450">
+                      <div class="feature-icon">
+                        <img src="{% static "assets/img/real time Data.png" %}" alt="Icon" style="width: 48px; height: 48px;">
+                      </div>
+                      <div class="feature-text">
+                        <h3>Real-time Data</h3>
+                        <p>Live readings show environmental and physiological metrics.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="500">
+                      <div class="feature-icon">
+                        <img src="{% static "assets/img/risk.png" %}" alt="Icon" style="width: 48px; height: 48px;">
+                      </div>
+                      <div class="feature-text">
+                        <h3>Risk Level</h3>
+                        <p>A color-coded display shows your current health risk.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                   <div class="col-lg-4">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="500">
+                      <div class="feature-icon">
+                        <img src="{% static "assets/img/personalized advisory.png" %}" alt="Icon" style="width: 48px; height: 48px;">
+                      </div>
+                      <div class="feature-text">
+                        <h3>Personalized Advisory</h3>
+                        <p>Get actionable health advice based on your risk.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="550">
+                      <div class="feature-icon">
+                        <img src="{% static "assets/img/forecast.png" %}" alt="Icon" style="width: 48px; height: 48px;">
+                      </div>
+                      <div class="feature-text">
+                        <h3>Forecast</h3>
+                        <p>A graph predicts future pollutant levels and potential hazards.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Hero Section -->
+
+    <!-- Home About Section -->
+    <section id="home-about" class="home-about section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-5 align-items-center">
+          <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+            <div class="about-image">
+              <img src="{% static "assets/img/health/facilities-1.webp" %}" alt="Modern Healthcare Facility" class="img-fluid rounded-3 mb-4">
+              
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+            <div class="about-content">
+              <h2>Personalized Air Quality and Health Risk Monitoring</h2>
+              <p class="lead">Monitor your personal exposure to air pollutants and vital health metrics in real-time using smart sensors and AI-driven risk prediction models. Get immediate alerts and suggestions tailored for Normal, Asthma, and COPD patients</p>
+
+              <p></p>
+
+              
+              <div class="cta-wrapper mt-4">
+                <a href="about.html" class="btn btn-primary">Learn More About Us</a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+       
+
+      </div>
+
+    </section><!-- /Home About Section -->
+
+    <!-- Featured Departments Section -->
+    
+
+    <!-- Featured Services Section -->
+    
+
+    <!-- Find A Doctor Section -->
+    
+
+    <!-- Call To Action Section -->
+    
+
+    
+    
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">BreatheWell</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static "assets/vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+  <script src="{% static "assets/vendor/php-email-form/validate.js" %}"></script>
+  <script src="{% static "assets/vendor/aos/aos.js" %}"></script>
+  <script src="{% static "assets/vendor/purecounter/purecounter_vanilla.js" %}"></script>
+  <script src="{% static "assets/vendor/swiper/swiper-bundle.min.js" %}"></script>
+  <script src="{% static "assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" %}"></script>
+  <script src="{% static "assets/vendor/isotope-layout/isotope.pkgd.min.js" %}"></script>
+  <script src="{% static "assets/vendor/glightbox/js/glightbox.min.js" %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static "assets/js/main.js" %}"></script>
+
+</body>
+
+</html>

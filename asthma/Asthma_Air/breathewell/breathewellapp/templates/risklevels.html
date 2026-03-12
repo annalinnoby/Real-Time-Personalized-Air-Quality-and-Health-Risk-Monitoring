@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Risk Level - BreatheWell</title>
+
+  <!-- Favicons -->
+  <link href="{% static 'wind.png' %}" rel="icon" />
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon" />
+
+  <!-- Vendor CSS -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+
+  <!-- Main CSS -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet" />
+
+  <style>
+    body.risk-level-page {
+      background-color: #f8fafc;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    main.risk-level-prediction {
+      max-width: 720px;
+      margin: 6rem auto 3rem;
+      padding: 2rem 1rem 3rem;
+    }
+
+    h1.page-title {
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #0273bc;
+      text-align: center;
+    }
+
+    .data-section {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgb(0 0 0 / 0.1);
+      padding: 1.8rem 2rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #0288d1;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid #0288d1;
+      padding-bottom: 6px;
+    }
+
+    #risk-level-card {
+      border-radius: 12px;
+      text-align: center;
+      padding: 1.7rem 1rem;
+      box-shadow: 0 0 12px #2e7d32aa;
+      max-width: 300px;
+      margin: 0 auto 1rem;
+      font-weight: 700;
+      font-size: 1.5rem;
+      user-select: none;
+    }
+
+    #risk-level-card.low {
+      background-color: #c8e6c9;
+      color: #2e7d32;
+    }
+
+    #risk-level-card.medium {
+      background-color: #fff9c4;
+      color: #f9a825;
+    }
+
+    #risk-level-card.high {
+      background-color: #ffcdd2;
+      color: #c62828;
+    }
+
+    #personalized-advisory {
+      background-color: #bbdefb;
+      border-left: 6px solid #0288d1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 1rem 1.2rem;
+      font-weight: 600;
+      color: #0d47a1;
+      user-select: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body class="risk-level-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+      <a href="/userhome/" class="btn-getstarted">Back to Home</a>
+    </div>
+  </header>
+
+  <main class="risk-level-prediction" role="main">
+    <h1 class="page-title">Current Health Risk Level</h1>
+
+    <section class="data-section">
+      <h2 class="section-title">Your Health Risk Status</h2>
+      <!-- Hardcoded Medium risk -->
+      <div id="risk-level-card" class="medium">
+        Medium
+      </div>
+      <div id="personalized-advisory">
+        Moderate health risk. Take a break from exercise and limit outdoor exposure.
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background" style="margin-top: 4rem; padding: 1rem 0; text-align: center;">
+    <div class="container">
+      <p>© <strong>BreatheWell</strong> All Rights Reserved</p>
+    </div>
+  </footer>
+
+</body>
+</html>

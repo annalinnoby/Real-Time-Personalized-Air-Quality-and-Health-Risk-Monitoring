@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Forecast - BreatheWell</title>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+    <style>
+        .chart-container {
+            width: 90%;
+            height: 500px;
+            margin: auto;
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header fixed-top">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a href="/userhome/" class="logo">BreatheWell</a>
+            <a class="btn btn-primary" href="/userhome/">Back to Home</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="chart-container">
+            <canvas id="forecastChart"></canvas>
+        </div>
+    </main>
+
+    <script>
+        {% if error %}
+            alert("{{ error }}");
+        {% endif %}
+
+        // === Pass Django data to JS ===
+        const labels = {{ labels|safe }};
+        const histLen = {{ hist_len }};
+        const forecastLen = {{ f_temp|length }};
+
+        const temp = {{ temp|safe }};
+        const f_temp = {{ f_temp|safe }};
+        const hum = {{ hum|safe }};
+        const f_hum = {{ f_hum|safe }};
+        const bodytemp = {{ bodytemp|safe }};
+        const f_bodytemp = {{ f_bodytemp|safe }};
+        const bpm = {{ bpm|safe }};
+        const f_bpm = {{ f_bpm|safe }};
+        const spo2 = {{ spo2|safe }};
+        const f_spo2 = {{ f_spo2|safe }};
+
+        // === Helper functions to pad datasets ===
+        function buildActual(actual, forecastLen) {
+            return actual.concat(Array(forecastLen).fill(null));
+        }
+
+        function buildForecast(histLen, forecast) {
+            return Array(histLen).fill(null).concat(forecast);
+        }
+
+        const datasets = [
+            { label: 'Temperature (Actual)', data: buildActual(temp, forecastLen), borderColor: 'red', tension: 0.3 },
+            { label: 'Temperature (Forecast)', data: buildForecast(histLen, f_temp), borderColor: 'red', borderDash: [6, 6], tension: 0.3 },
+
+            { label: 'Humidity (Actual)', data: buildActual(hum, forecastLen), borderColor: 'blue', tension: 0.3 },
+            { label: 'Humidity (Forecast)', data: buildForecast(histLen, f_hum), borderColor: 'blue', borderDash: [6, 6], tension: 0.3 },
+
+            { label: 'Body Temp (Actual)', data: buildActual(bodytemp, forecastLen), borderColor: 'green', tension: 0.3 },
+            { label: 'Body Temp (Forecast)', data: buildForecast(histLen, f_bodytemp), borderColor: 'green', borderDash: [6, 6], tension: 0.3 },
+
+            { label: 'BPM (Actual)', data: buildActual(bpm, forecastLen), borderColor: 'orange', tension: 0.3 },
+            { label: 'BPM (Forecast)', data: buildForecast(histLen, f_bpm), borderColor: 'orange', borderDash: [6, 6], tension: 0.3 },
+
+            { label: 'SpO2 (Actual)', data: buildActual(spo2, forecastLen), borderColor: 'purple', tension: 0.3 },
+            { label: 'SpO2 (Forecast)', data: buildForecast(histLen, f_spo2), borderColor: 'purple', borderDash: [6, 6], tension: 0.3 },
+        
+                    { label: 'Air Quality (Actual)', data: buildActual(spo2, forecastLen), borderColor: 'black', tension: 0.3 },
+            { label: 'Air Quality (Forecast)', data: buildForecast(histLen, f_spo2), borderColor: 'black', borderDash: [6, 6], tension: 0.3 },
+        
+            ];
+
+        const ctx = document.getElementById('forecastChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels.concat(Array(forecastLen).fill(null)), // Extend labels for forecast
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Sensor Data Forecast (ARIMA)' },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: {
+                    x: { display: true, title: { display: true, text: 'Time' } },
+                    y: { display: true, title: { display: true, text: 'Values' } }
+                }
+            }
+        });
+    </script>
+
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forecast - BreatheWell</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <h1>Environmental & Physiological Forecast</h1>
+
+  {% if error %}
+    <p style="color:red">{{ error }}</p>
+  {% else %}
+    <canvas id="forecastChart" width="1200" height="500"></canvas>
+
+    <script>
+      const ctx = document.getElementById('forecastChart').getContext('2d');
+
+      const labels = {{ labels|safe }};
+      const f_labels_1d = {{ forecast_labels_1d|safe }};
+      const f_labels_7d = {{ forecast_labels_7d|safe }};
+
+      const temp = {{ temp|safe }};
+      const hum = {{ hum|safe }};
+      const bodytemp = {{ bodytemp|safe }};
+      const bpm = {{ bpm|safe }};
+      const spo2 = {{ spo2|safe }};
+
+      const f_temp_1d = {{ f_temp_1d|safe }};
+      const f_temp_7d = {{ f_temp_7d|safe }};
+      const f_hum_1d = {{ f_hum_1d|safe }};
+      const f_hum_7d = {{ f_hum_7d|safe }};
+      const f_bodytemp_1d = {{ f_bodytemp_1d|safe }};
+      const f_bodytemp_7d = {{ f_bodytemp_7d|safe }};
+      const f_bpm_1d = {{ f_bpm_1d|safe }};
+      const f_bpm_7d = {{ f_bpm_7d|safe }};
+      const f_spo2_1d = {{ f_spo2_1d|safe }};
+      const f_spo2_7d = {{ f_spo2_7d|safe }};
+
+      const allLabels = labels.concat(f_labels_1d).concat(f_labels_7d);
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: allLabels,
+          datasets: [
+            {
+              label: 'Temperature (°C)',
+              data: temp.concat(f_temp_1d).concat(f_temp_7d),
+              borderColor: 'red',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.3
+            },
+            {
+              label: 'Humidity (%)',
+              data: hum.concat(f_hum_1d).concat(f_hum_7d),
+              borderColor: 'blue',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.3
+            },
+            {
+              label: 'Body Temperature (°C)',
+              data: bodytemp.concat(f_bodytemp_1d).concat(f_bodytemp_7d),
+              borderColor: 'orange',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.3
+            },
+            {
+              label: 'BPM',
+              data: bpm.concat(f_bpm_1d).concat(f_bpm_7d),
+              borderColor: 'green',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.3
+            },
+            {
+              label: 'SpO2 (%)',
+              data: spo2.concat(f_spo2_1d).concat(f_spo2_7d),
+              borderColor: 'purple',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.3
+            },
+               {
+              label: 'Air Quality',
+              data: spo2.concat(f_spo2_1d).concat(f_spo2_7d),
+              borderColor: 'black',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: { mode: 'index', intersect: false }
+          },
+          scales: {
+            x: { display: true, title: { display: true, text: 'Time' } },
+            y: { display: true, title: { display: true, text: 'Values' } }
+          }
+        }
+      });
+    </script>
+  {% endif %}
+</body>
+
+</html>
+
+</html>

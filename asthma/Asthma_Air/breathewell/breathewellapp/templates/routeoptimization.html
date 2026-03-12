@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Route Optimization - BreatheWell</title>
+
+  <!-- CSS -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    body { font-family: 'Roboto', sans-serif; background:#f8fafc; margin:0; padding-top:70px; }
+    main.map-section { max-width:820px; margin:2rem auto; padding:2rem 1rem; }
+    h1 { text-align:center; color:#0273bc; margin-bottom:1.5rem; font-weight:700; }
+    .data-section { background:#fff; border-radius:12px; box-shadow:0 6px 20px rgb(0 0 0 / 0.1); padding:2rem; }
+    #map { height:450px; width:100%; border-radius:8px; border:1px solid #ccc; margin-bottom:1rem; }
+    #routeForm { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:1rem; }
+    #routeForm input { flex:1; padding:8px; border-radius:4px; border:1px solid #ccc; min-width:160px; }
+    #routeForm button { padding:8px 12px; border:none; background:#0288d1; color:white; border-radius:4px; cursor:pointer; }
+    #routeResults { padding:1rem; background:#e3f2fd; border-left:6px solid #0288d1; border-radius:6px; font-weight:600; color:#0d47a1; min-height:60px; }
+    footer { text-align:center; padding:1rem; background:#0288d1; color:#fff; margin-top:2rem; font-size:0.9rem; }
+  </style>
+</head>
+
+<body>
+
+<header id="header" class="header d-flex align-items-center fixed-top">
+  <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+    <a href="/userhome/" class="logo d-flex align-items-center">
+      <img src="{% static 'assets/img/wind.png' %}" alt="BreatheWell Logo" width="32" height="32">
+      <h1 class="sitename ms-2">BreatheWell</h1>
+    </a>
+    <a class="btn-getstarted" href="/userhome/">Back to Home</a>
+  </div>
+</header>
+
+<main class="map-section">
+  <h1>Route Optimizer (Pollution-Aware)</h1>
+
+  <section class="data-section">
+    <div id="map"></div>
+
+    <form id="routeForm">
+      <input type="text" id="source" placeholder="Enter source location" required />
+      <input type="text" id="destination" placeholder="Enter destination" required />
+      <button type="submit">Find Safe Routes</button>
+    </form>
+
+    <div id="routeResults">
+      Enter source and destination to calculate routes.
+    </div>
+  </section>
+</main>
+
+<footer>© 2025 BreatheWell. All rights reserved.</footer>
+
+<!-- JS -->
+<script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+/* ===================== POLLUTED ZONES FROM DJANGO ===================== */
+const dangerZones = [
+  {% for p in polluted_places %}
+  {
+    name: "{{ p.place_name }}",
+    lat: {{ p.latitude }},
+    lon: {{ p.longitude }},
+    radius: {{ p.radius }}
+  }{% if not forloop.last %},{% endif %}
+  {% endfor %}
+];
+
+/* ===================== MAP INIT ===================== */
+const map = L.map('map').setView([10.8505, 76.2711], 8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+let routeLayers = [];
+
+/* ===================== DRAW POLLUTED ZONES ===================== */
+dangerZones.forEach(z => {
+  L.circle([z.lat, z.lon], {
+    radius: z.radius,
+    color: 'red',
+    fillColor: '#ff0000',
+    fillOpacity: 0.45
+  }).addTo(map).bindPopup(`⚠️ Polluted Zone: ${z.name}`);
+});
+
+/* ===================== HELPERS ===================== */
+async function geocode(place) {
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(place)}`
+  );
+  const data = await res.json();
+  if (!data.length) return null;
+  return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+}
+
+function clearRoutes() {
+  routeLayers.forEach(r => map.removeLayer(r));
+  routeLayers = [];
+}
+
+function routeHitsPollution(coords) {
+  return coords.some(c =>
+    dangerZones.some(z =>
+      map.distance([c[1], c[0]], [z.lat, z.lon]) <= z.radius
+    )
+  );
+}
+
+/* ===================== FORM SUBMIT ===================== */
+document.getElementById('routeForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  clearRoutes();
+
+  const src = document.getElementById('source').value.trim();
+  const dst = document.getElementById('destination').value.trim();
+  const info = document.getElementById('routeResults');
+
+  info.innerHTML = "Calculating routes using OpenStreetMap...";
+
+  const s = await geocode(src);
+  const d = await geocode(dst);
+
+  if (!s || !d) {
+    info.innerHTML = "❌ Location not found.";
+    return;
+  }
+
+  const osrmURL =
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${s[1]},${s[0]};${d[1]},${d[0]}` +
+    `?overview=full&alternatives=true&geometries=geojson`;
+
+  const res = await fetch(osrmURL);
+  const data = await res.json();
+
+  if (!data.routes) {
+    info.innerHTML = "❌ No route available.";
+    return;
+  }
+
+  let safeExists = false;
+
+  data.routes.forEach((route, idx) => {
+    const coords = route.geometry.coordinates;
+    const polluted = routeHitsPollution(coords);
+
+    const poly = L.polyline(
+      coords.map(c => [c[1], c[0]]),
+      {
+        color: polluted ? 'red' : 'green',
+        weight: polluted ? 3 : 5,
+        opacity: 0.9
+      }
+    ).addTo(map);
+
+    poly.bindPopup(
+      polluted
+        ? "❌ Route passes through polluted zone"
+        : "✅ Safe alternate route"
+    );
+
+    routeLayers.push(poly);
+    if (!polluted) safeExists = true;
+  });
+
+  map.fitBounds(routeLayers[0].getBounds());
+
+  info.innerHTML = safeExists
+    ? "✅ Green routes avoid polluted zones. Red routes are unsafe."
+    : "⚠️ All available routes pass through polluted zones.";
+});
+</script>
+
+</body>
+</html>

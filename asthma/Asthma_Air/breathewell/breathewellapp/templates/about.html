@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About & Educational Content - BreatheWell</title>
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Roboto', sans-serif; background:#f8fafc; padding-top:70px; margin:0; }
+    main.about-section { max-width:800px; margin:3rem auto; padding:2rem 1rem; }
+    main.about-section h1 { text-align:center; color:#0273bc; margin-bottom:2rem; font-weight:700; }
+    section.content-section { background:#fff; border-radius:12px; padding:2rem; margin-bottom:2rem; box-shadow:0 6px 20px rgb(0 0 0 / 0.1); }
+    section.content-section h2 { color:#0288d1; font-weight:700; margin-bottom:1rem; border-bottom:3px solid #0288d1; padding-bottom:6px; }
+    section.content-section h3 { color:#0273bc; margin-top:1rem; margin-bottom:0.5rem; font-weight:600; }
+    section.content-section p { line-height:1.6; color:#333; }
+    section.content-section ul { margin-left:1.2rem; color:#333; }
+    section.content-section li { margin-bottom:0.5rem; }
+    footer { text-align:center; padding:1rem; background:#0288d1; color:#fff; margin-top:2rem; font-size:0.9rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <img src="{% static 'assets/img/wind.png' %}" alt="BreatheWell Logo" class="img-fluid" style="width:32px; height:32px; margin-right:8px;">
+        <h1 class="sitename">BreatheWell</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html" class="active">About</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      {% if 'email' in request.session %}
+        <a class="btn-getstarted" href="/userhome/">Back to Home</a>
+      {% else %}
+        <a class="btn-getstarted" href="/">Back to Home</a>
+      {% endif %}
+
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="about-section">
+    <h1>About Air Pollutants & Sensors</h1>
+
+    <section class="content-section" aria-labelledby="pm-co">
+      <h2 id="pm-co">What are PM2.5 and CO?</h2>
+      <p>PM2.5 are fine inhalable particles with diameters that are generally 2.5 micrometers and smaller. These particles can penetrate deep into your lungs and even enter your bloodstream, causing health problems.</p>
+      <p>Carbon monoxide (CO) is a colorless, odorless gas that can be harmful when inhaled in large amounts. It reduces oxygen delivery to your body's organs and tissues.</p>
+    </section>
+
+    <section class="content-section" aria-labelledby="why-harmful">
+      <h2 id="why-harmful">Why Are These Pollutants Harmful?</h2>
+      <p>Exposure to high levels of PM2.5 and CO can increase the risk of respiratory diseases, cardiovascular problems, and worsen existing health conditions like asthma.</p>
+    </section>
+
+    <section class="content-section" aria-labelledby="sensor-status">
+      <h2 id="sensor-status">Sensor Status</h2>
+      <p>Check your sensor devices' battery life and connectivity status to ensure continuous monitoring.</p>
+      <ul>
+        <li><strong>Environmental Sensor Battery:</strong> <span id="envBatteryStatus">--</span></li>
+        <li><strong>Wearable Device Battery:</strong> <span id="wearableBatteryStatus">--</span></li>
+        <li><strong>Connection Status:</strong> <span id="connectionStatus">--</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 BreatheWell. All rights reserved. | Designed to empower you to breathe well and live well.
+  </footer>
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Real-Time JS -->
+  <script>
+    // Mock function to simulate sensor data updates
+    function updateSensorStatus() {
+      // You can replace this with actual API fetch to get live sensor values
+      const envBattery = Math.floor(Math.random()*100) + '%';
+      const wearableBattery = Math.floor(Math.random()*100) + '%';
+      const connection = Math.random() > 0.1 ? 'Connected' : 'Disconnected';
+
+      document.getElementById('envBatteryStatus').innerText = envBattery;
+      document.getElementById('wearableBatteryStatus').innerText = wearableBattery;
+      document.getElementById('connectionStatus').innerText = connection;
+    }
+
+    // Initialize all on page load
+    window.onload = () => {
+      updateSensorStatus();               // Update sensor info immediately
+      setInterval(updateSensorStatus, 5000); // Refresh every 5 seconds
+
+      if(typeof updateRealTimeData === 'function') updateRealTimeData();
+      if(typeof initForecastChart === 'function') initForecastChart();
+      if(typeof initHistoricalChart === 'function') initHistoricalChart(24);
+      if(typeof loadEventLog === 'function') loadEventLog();
+    };
+  </script>
+
+</body>
+</html>

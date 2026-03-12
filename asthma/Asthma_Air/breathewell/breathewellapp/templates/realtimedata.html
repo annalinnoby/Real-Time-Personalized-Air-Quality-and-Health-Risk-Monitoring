@@ -1,0 +1,313 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Real-Time Data - BreatheWell</title>
+
+  <!-- Favicons -->
+  <link href="{% static "wind.png" %}" rel="icon" />
+  <link href="{% static "assets/img/apple-touch-icon.png" %}" rel="apple-touch-icon" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" />
+  <link href="{% static "assets/vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet" />
+  <link href="{% static "assets/vendor/aos/aos.css" %}" rel="stylesheet" />
+  <link href="{% static "assets/vendor/fontawesome-free/css/all.min.css" %}" rel="stylesheet" />
+  <link href="{% static "assets/vendor/swiper/swiper-bundle.min.css" %}" rel="stylesheet" />
+  <link href="{% static "assets/vendor/glightbox/css/glightbox.min.css" %}" rel="stylesheet" />
+
+  <!-- Main CSS File (assuming main.css is your main stylesheet) -->
+  <link href="{% static "assets/css/main.css" %}" rel="stylesheet" />
+
+  <style>
+    /* Real-Time Data page custom styles */
+    body.index-page {
+      background-color: #f8fafc;
+    }
+
+    main.real-time-data {
+      padding: 2rem 1rem 3rem;
+      max-width: 1100px;
+      margin: 5rem auto 3rem;
+    }
+
+    h1.page-title {
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #0273bc;
+      text-align: center;
+    }
+
+    .data-section {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgb(0 0 0 / 0.1);
+      padding: 1.8rem 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #0288d1;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid #0288d1;
+      padding-bottom: 6px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .metric-card {
+      background: #e3f2fd;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      box-shadow: inset 0 0 8px rgb(2 136 209 / 0.15);
+      text-align: center;
+      user-select: none;
+    }
+
+    .metric-label {
+      font-weight: 600;
+      color: #01579b;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0d47a1;
+    }
+
+    /* Risk Level Card */
+    #risk-level-card {
+      background-color: #c8e6c9;
+      border-radius: 12px;
+      text-align: center;
+      padding: 1.7rem 1rem;
+      box-shadow: 0 0 12px #2e7d32aa;
+      max-width: 300px;
+      margin: 0 auto 1rem;
+      user-select: none;
+    }
+
+    #risk-level-card.low {
+      background-color: #c8e6c9;
+      color: #2e7d32;
+      box-shadow: 0 0 15px #2e7d32aa;
+    }
+
+    #risk-level-card.medium {
+      background-color: #fff9c4;
+      color: #f9a825;
+      box-shadow: 0 0 15px #f9a825aa;
+    }
+
+    #risk-level-card.high {
+      background-color: #ffcdd2;
+      color: #c62828;
+      box-shadow: 0 0 15px #c62828aa;
+    }
+
+    #personalized-advisory {
+      background-color: #bbdefb;
+      border-left: 6px solid #0288d1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 1rem 1.2rem;
+      font-weight: 600;
+      color: #0d47a1;
+      user-select: none;
+      border-radius: 6px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      main.real-time-data {
+        margin: 6rem 1rem 3rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="index-page">
+  <!-- Header copied from your index page -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div
+      class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between"
+    >
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <img
+          src="{% static "assets/img/wind.png" %}"
+          alt="BreatheWell Logo"
+          class="img-fluid"
+          style="width: 32px; height: 32px; margin-right: 8px"
+        />
+        <h1 class="sitename">BreatheWell</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        {% comment %} <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li class="dropdown">
+            <a href="#"
+              ><span>Services</span> <i class="bi bi-chevron-down toggle-dropdown"></i
+            ></a>
+            <ul>
+              <li><a href="realtimedata.html" class="active">Real Time Data</a></li>
+              <li><a href="risklevels.html">Risk Levels</a></li>
+              <li><a href="personalizedadvisories.html">Personalized Advisories</a></li>
+              <li><a href="forcast.html">Forcast</a></li>
+              <li><a href="historicaldata.html">Historical Data</a></li>
+              <li><a href="routeoptimization.html">Route Optimization</a></li>
+            </ul>
+          </li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav> {% endcomment %}
+
+      <a class="btn-getstarted" href="/userhome/">Back to Home</a>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="real-time-data" role="main" aria-label="Real-time environmental and physiological sensor data">
+    <h1 class="page-title">Real-Time Data Collection</h1>
+
+    <!-- Environmental Sensors -->
+    <section class="data-section" aria-labelledby="env-sensors-title" role="region">
+      <h2 id="env-sensors-title" class="section-title">Environmental Sensors</h2>
+      <div class="metrics-grid" id="environmental-metrics" aria-live="polite" aria-atomic="true">
+        <div class="metric-card" role="group" aria-label="PM 2.5 level">
+          <div class="metric-label">AirQuality</div>
+          <div class="metric-value" id="pm25">{{value7}}</div>
+        </div>
+     
+        <div class="metric-card" role="group" aria-label="Temperature in Celsius">
+          <div class="metric-label">Temperature (°C)</div>
+          <div class="metric-value" id="temperature">{{value1}}</div>
+        </div>
+        <div class="metric-card" role="group" aria-label="Humidity percentage">
+          <div class="metric-label">Humidity (%)</div>
+          <div class="metric-value" id="humidity">{{value2}}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wearable Device Data -->
+    <section class="data-section" aria-labelledby="wearable-data-title" role="region">
+      <h2 id="wearable-data-title" class="section-title">Wearable Device Data</h2>
+      <div class="metrics-grid" id="wearable-metrics" aria-live="polite" aria-atomic="true">
+        <div class="metric-card" role="group" aria-label="Heart rate in beats per minute">
+          <div class="metric-label">Heart Rate (bpm)</div>
+          <div class="metric-value" id="heartRate">{{value4}}</div>
+        </div>
+        <div class="metric-card" role="group" aria-label="Oxygen saturation percentage">
+          <div class="metric-label">SpO₂ (%)</div>
+          <div class="metric-value" id="spo2">{{value5}}</div>
+        </div>
+        <div class="metric-card" role="group" aria-label="Body temperature in Celsius">
+          <div class="metric-label">Body Temperature (°C)</div>
+          <div class="metric-value" id="bodyTemp">{{value3}}</div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="data-section" style="max-width:720px;margin:auto;">
+  <h2 class="section-title">Health Risk Assessment</h2>
+
+  <!-- Risk Level Card -->
+  <div id="risk-level-card" class="{{ risk_class }}">
+    {{ risk_level }} Risk
+  </div>
+
+  <!-- Personalized Advisory -->
+  <div id="personalized-advisory">
+    <ul>
+      {% for advice in advisories %}
+        <li>{{ advice }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+    <!-- Risk Level and Advisory -->
+    {% comment %} <section
+      class="data-section"
+      aria-labelledby="risk-level-title"
+      role="region"
+      style="max-width: 720px; margin-left: auto; margin-right: auto;"
+    >
+      <h2 id="risk-level-title" class="section-title">Current Health Risk Level</h2>
+      <div id="risk-level-card" class="low" role="alert" aria-live="polite" aria-atomic="true" tabindex="0">
+        --
+      </div>
+      <div id="personalized-advisory" tabindex="0" aria-live="polite" aria-atomic="true">
+        Personalized advisory will appear here based on your real-time data.
+      </div>
+    </section> {% endcomment %}
+  </main>
+
+  <!-- Footer copied from your index page -->
+  <footer
+    id="footer"
+    class="footer position-relative light-background"
+    style="margin-top: 4rem; padding: 1rem 0; font-size: 0.9rem; text-align: center; color: #475d66;"
+  >
+    <div class="container copyright text-center mt-4">
+      <p>
+        © <span>Copyright</span> <strong class="px-1 sitename">BreatheWell</strong> <span>All Rights Reserved</span>
+      </p>
+      <div class="credits">
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a
+    href="#"
+    id="scroll-top"
+    class="scroll-top d-flex align-items-center justify-content-center"
+    aria-label="Scroll to top"
+    ><i class="bi bi-arrow-up-short"></i
+  ></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static "assets/vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+  <script src="{% static "assets/vendor/php-email-form/validate.js" %}"></script>
+  <script src="{% static "assets/vendor/aos/aos.js" %}"></script>
+  <script src="{% static "assets/vendor/purecounter/purecounter_vanilla.js" %}"></script>
+  <script src="{% static "assets/vendor/swiper/swiper-bundle.min.js" %}"></script>
+  <script src="{% static "assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" %}"></script>
+  <script src="{% static "assets/vendor/isotope-layout/isotope.pkgd.min.js" %}"></script>
+  <script src="{% static "assets/vendor/glightbox/js/glightbox.min.js" %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static "assets/js/main.js" %}"></script>
+
+  <!-- Real-time data simulation and updates -->
+ 
+
+   
+</body>
+
+</html>
